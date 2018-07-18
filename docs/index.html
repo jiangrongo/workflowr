@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>How to use workflowr</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 66px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+
+.section h2 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h3 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h4 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h5 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h6 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">workflowr</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/jiangrongo/paper-reading">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">How to use workflowr</h1>
+
+</div>
+
+
+<p>This is a website for quick satrt using workflowr. Contents are token from <a href="https://jdblischak.github.io/workflowr/articles/wflow-01-getting-started.html" class="uri">https://jdblischak.github.io/workflowr/articles/wflow-01-getting-started.html</a></p>
+<hr />
+<div id="installation-and-configure-git-only-need-to-do-once-per-computer" class="section level2">
+<h2>Installation and Configure Git (only need to do once per computer)</h2>
+<pre class="r"><code>install.packages(&quot;workflowr&quot;)
+library(&quot;workflowr&quot;)
+
+wflow_git_config(user.name = &quot;Jiangrong Ouyang&quot;, user.email = &quot;jiangrongo@student.unimelb.edu.au&quot;)</code></pre>
+</div>
+<div id="start-a-new-workflowr-project" class="section level2">
+<h2>Start a new workflowr project</h2>
+<pre class="r"><code>wflow_start(&quot;workflowr&quot;)</code></pre>
+<ul>
+<li><p>This creates a directory called <code>workflowr/</code>. It also changes the working directory to <code>workflowr/</code></p></li>
+<li>2 required subdirectories are <code>analysis/</code> and <code>docs/</code></li>
+<li><code>analysis/</code>: This directory contains all the source, R Markdown files for implementing the data analyses.</li>
+<li><p><code>docs/</code>: This directory contains all the HTML files, The HTML files are built from the R Markdown files in <code>analysis/</code></p></li>
+</ul>
+</div>
+<div id="build-the-website" class="section level2">
+<h2>Build the website</h2>
+<ul>
+<li><p>Currently, <code>docs/</code> directory is empty because we have not yet generated the website from the <code>analysis/</code> files.</p></li>
+<li><p>To build the website, run the function <code>wflow_build()</code>. To view the site run <code>wflow_view()</code></p></li>
+</ul>
+<pre class="r"><code>wflow_build()
+wflow_view()</code></pre>
+</div>
+<div id="customize-your-site" class="section level2">
+<h2>Customize your site!</h2>
+<ul>
+<li>Edit the R Markdown files in <code>analysis/</code><br />
+</li>
+<li>Edit the theme and layout in <code>analysis/_site.yml</code><br />
+</li>
+<li>Add new or copy existing R Markdown <code>files to analysis/</code><br />
+</li>
+<li>Re-build the HTML files and display them by <code>wflow_build()</code></li>
+</ul>
+</div>
+<div id="publish-the-website" class="section level2">
+<h2>Publish the website</h2>
+<p>i.e. version the source code and HTML results Now, the project is still local.<br />
+To view the status of the workflowr project, run <code>wflow_status()</code></p>
+<pre class="r"><code>wflow_status()</code></pre>
+<ul>
+<li><p>To publish your changes as part of your website, use <code>wflow_publish()</code>.</p></li>
+<li><p>To commit your changes without publishing them yet, use <code>wflow_git_commit()</code>.</p></li>
+</ul>
+<pre class="r"><code>wflow_publish(&quot;analysis/*Rmd&quot;, &quot;Start my new project&quot;)
+wflow_status()  # view the status again</code></pre>
+</div>
+<div id="deploy-the-website" class="section level2">
+<h2>Deploy the website</h2>
+<ul>
+<li>create repository on GitHub</li>
+<li>tell local Git repository about this new GitHub repository</li>
+</ul>
+<pre class="r"><code>wflow_git_remote(&quot;origin&quot;, &quot;jiangrongo&quot;, &quot;workflowr&quot;)  </code></pre>
+<p>This creates the alias “origin” that points to <strong>remote repository</strong> on GitHub. <strong>Only</strong> need to run this command <strong>once</strong> to add the remote repository.</p>
+<ul>
+<li><strong>Each time you make changes to your project: run <code>wflow_publish()</code>. Then run <code>wflow_git_push()</code> to send the changes to GitHub.</strong></li>
+</ul>
+<pre class="r"><code>wflow_git_push(dry_run = TRUE)
+wflow_git_push()</code></pre>
+<ul>
+<li><p>dry_run = TRUE previews what the function will do<br />
+Remove this argument to actually push to GitHub.</p></li>
+<li><p>if Error occur, push it in teriminal <code>cd workflowr</code><br />
+<code>git push origin master</code></p></li>
+</ul>
+<hr />
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
