@@ -65,7 +65,7 @@ wflow_status()  # view the status again
 
 
 ## Deploy the website
- * create repository on GitHub
+ * **create repository on GitHub**
  * tell local Git repository about this new GitHub repository
 ```{r eval=FALSE}
 wflow_git_remote("origin", "jiangrongo", "workflowr")  
