@@ -1,9 +1,90 @@
 ---
-title: "Home"
-site: workflowr::wflow_site
+title: "How to use workflowr"
 output:
-  workflowr::wflow_html:
-    toc: false
+  html_document:
+    toc: true
 ---
 
-Welcome to my research website.
+This is a website for quick satrt using workflowr. Contents are token from https://jdblischak.github.io/workflowr/articles/wflow-01-getting-started.html
+
+***
+
+## Installation and Configure Git (only need to do once per computer)
+```{r eval=FALSE}
+install.packages("workflowr")
+library("workflowr")
+
+wflow_git_config(user.name = "Jiangrong Ouyang", user.email = "jiangrongo@student.unimelb.edu.au")
+```
+
+## Start a new workflowr project
+```{r eval=FALSE}
+wflow_start("workflowr")
+```
+* This creates a directory called `workflowr/`. It also changes the working directory to `workflowr/`
+
+* 2 required subdirectories are `analysis/` and `docs/`
+ + `analysis/`: This directory contains all the source,
+   R Markdown files for implementing the data analyses.
+ + `docs/`: This directory contains all the HTML files,
+   The HTML files are built from the R Markdown files in `analysis/`
+
+## Build the website
+* Currently, `docs/` directory is empty because we have not yet generated the website from the `analysis/` files.
+
+* To build the website, run the function `wflow_build()`. To view the site run `wflow_view()`
+```{r eval=FALSE}
+wflow_build()
+wflow_view()
+```
+
+
+## Customize your site!  
+   + Edit the R Markdown files in `analysis/`  
+   + Edit the theme and layout in `analysis/_site.yml`  
+   + Add new or copy existing R Markdown `files to analysis/`  
+   + Re-build the HTML files and display them by `wflow_build()`  
+
+
+## Publish the website  
+   i.e. version the source code and HTML results
+Now, the project is still local.  
+To view the status of the workflowr project, run `wflow_status()`
+```{r eval=FALSE}
+wflow_status()
+```
+
+ * To publish your changes as part of your website, use `wflow_publish()`.
+
+ * To commit your changes without publishing them yet, use `wflow_git_commit()`.
+
+```{r eval=FALSE}
+wflow_publish("analysis/*Rmd", "Start my new project")
+wflow_status()  # view the status again
+```
+
+
+## Deploy the website
+ * create repository on GitHub
+ * tell local Git repository about this new GitHub repository
+```{r eval=FALSE}
+wflow_git_remote("origin", "jiangrongo", "workflowr")  
+```
+
+This creates the alias “origin” that points to **remote repository** on GitHub. **Only** need to run this command **once** to add the remote repository.  
+
+* **Each time you make changes to your project: run `wflow_publish()`.
+Then run `wflow_git_push()` to send the changes to GitHub.**
+
+```{r eval=FALSE}
+wflow_git_push(dry_run = TRUE)
+wflow_git_push()
+```
+* dry_run = TRUE previews what the function will do  
+ Remove this argument to actually push to GitHub.
+ 
++ if Error occur, push it in teriminal
+`cd workflowr`  
+`git push origin master`
+
+***
